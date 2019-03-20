@@ -1,0 +1,253 @@
+import { Component, createElement } from 'react';
+import * as styledComponents from 'styled-components';
+
+class ComponentPaletteRegistry {
+    constructor() {
+        this.componentMap = new Map();
+    }
+    register(descriptor) {
+        this.componentMap.set(descriptor.name, descriptor);
+    }
+    get components() {
+        return Array.from(this.componentMap.values());
+    }
+}
+
+const lightTheme = {
+    palette: {
+        background: '#fff'
+    },
+    groupHeader: {
+        textColor: '#fff',
+        background: '#03a9f4'
+    },
+    paletteItem: {
+        borderColor: '#eaeff3',
+        iconColor: '#b6b6b6',
+        hoverIconColor: '#03a9f4',
+        hoverBackgroundColor: '#fff',
+        hoverShadowColor: 'rgba(0, 0, 1, 0.2)',
+        hoverBorderColor: 'rgb(213, 215, 218)',
+        tooltipTextColor: '#fff',
+        tooltipBackgroundColor: '#1a1a1a',
+        tooltipBorderColor: 'rgb(213, 215, 218)',
+        tooltipShadowColor: 'rgba(0, 0, 1, 0.15)'
+    },
+    typography: {
+        sizes: {
+            text: '0.75rem',
+            title: '0.8125rem'
+        },
+        font: '"Roboto", sans-serif',
+        weights: {
+            bold: '700'
+        }
+    }
+};
+const darkTheme = {
+    palette: {
+        background: '#333333'
+    },
+    groupHeader: {
+        background: '#084771',
+        textColor: '#fff'
+    },
+    paletteItem: {
+        borderColor: 'transparent',
+        iconColor: '#DBDBDB',
+        hoverIconColor: '#fff',
+        hoverBackgroundColor: 'transparent',
+        hoverShadowColor: 'transparent',
+        hoverBorderColor: '#084771',
+        tooltipTextColor: '#fff',
+        tooltipBackgroundColor: '#084771',
+        tooltipBorderColor: '#084771',
+        tooltipShadowColor: 'rgba(0, 0, 1, 0.15)'
+    },
+    typography: {
+        sizes: {
+            text: '0.75rem',
+            title: '0.8125rem'
+        },
+        font: '"Roboto", sans-serif',
+        weights: {
+            bold: '700'
+        }
+    }
+};
+
+const { default: styled, css, createGlobalStyle, keyframes, ThemeProvider } = styledComponents;
+
+const Palette = styled.div `
+    display: flex;
+    flex-wrap: wrap;
+    background: ${(props) => props.theme.palette.background};
+    padding: 7px 7px 35px;
+    overflow: auto;
+    display: ${(props) => props.collapsed ? 'none' : 'flex'};
+`;
+const PaletteItem = styled.div `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 62px;
+    height: 62px;
+    position: relative;
+    border: 1px solid ${(props) => props.theme.paletteItem.borderColor};
+    margin-top: -1px;
+    margin-right: -1px;
+    cursor: pointer;
+
+    svg {
+      width: 40px;
+      max-width: 100%;
+      max-height: 100%;
+      fill: ${(props) => props.theme.paletteItem.iconColor};
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: ${(props) => props.theme.paletteItem.hoverBackgroundColor};
+        box-shadow: 0px 0px 9px 0px ${(props) => props.theme.paletteItem.hoverShadowColor};
+        border: 1px solid ${(props) => props.theme.paletteItem.hoverBorderColor};
+        transition: opacity 0.2s;
+        z-index: 100;
+
+        svg {
+          fill: ${(props) => props.theme.paletteItem.hoverIconColor};
+        }
+        .component-palette-tooltip{
+          margin-left: 0;
+          visibility: visible;
+          opacity: 0.8;
+          transition: opacity 0.2s;
+        }
+    }
+    &:active .component-palette-tooltip{
+      visibility: hidden;
+      margin-left: -9999px;
+      opacity: 0;
+    }
+`;
+const Tooltip = styled.div `
+    position: absolute;
+    width: 100%;
+    max-width: 82px;
+    top:100%;
+    left: 0;
+    margin-top: 5px;
+    padding: 7px 0;
+    text-align: center;
+    word-wrap: break-word;
+    font-family: ${(props) => props.theme.typography.font};
+    font-size: ${(props) => props.theme.typography.sizes.text};
+    line-height: 1;
+    background-color: ${(props) => props.theme.paletteItem.tooltipBackgroundColor};
+    color: ${(props) => props.theme.paletteItem.tooltipTextColor};
+    border: 1px solid ${(props) => props.theme.paletteItem.tooltipBorderColor};
+    border-radius: 3px;
+    box-shadow: 0px 3px 12px 0px ${(props) => props.theme.paletteItem.tooltipShadowColor};
+    z-index: 145;
+    visibility: hidden;
+    margin-left: -9999px;
+    opacity: 0;
+
+    &:after{
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -2px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 2px 4px 2px;
+        border-color: transparent transparent ${(props) => props.theme.paletteItem.tooltipBackgroundColor} transparent;
+    }
+    &:before{
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -3px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 3px 5px 3px;
+        border-color: transparent transparent ${(props) => props.theme.paletteItem.tooltipBackgroundColor} transparent;
+    }
+`;
+const GroupHeader = styled.div `
+    line-height: 1;
+    top:100%;
+    left: 0;
+    margin-top: 5px;
+    padding: 7px;
+    font-family: ${(props) => props.theme.typography.font};
+    font-size: ${(props) => props.theme.typography.sizes.title};
+    font-weight: ${(props) => props.theme.typography.weights.bold};
+    color: ${(props) => props.theme.groupHeader.textColor};
+    background-color: ${(props) => props.theme.groupHeader.background};
+    cursor: pointer;
+`;
+const PalleteGroup = styled.div ``;
+
+class ComponentPallette extends Component {
+    constructor(props) {
+        super(props);
+        this.items = {};
+        const descriptors = this.props.registry
+            .components
+            .map((item) => {
+            return item.group ? Object.assign({}, item) : Object.assign({}, item, { group: 'Other' });
+        });
+        this.groups = descriptors
+            .map((item) => item.group)
+            .reduce((prev, curr) => {
+            if (!prev.includes(curr)) {
+                prev.push(curr);
+            }
+            return prev;
+        }, []);
+        this.groups
+            .forEach((group) => {
+            const groupped = descriptors.filter((item) => item.group === group);
+            this.items[group] = groupped.map((descriptor, index) => createElement(PaletteItem, { key: index, draggable: true, onDragStart: (event) => this.props.onDragStart(event, descriptor.name) },
+                createElement(Tooltip, { className: 'component-palette-tooltip' }, descriptor.title),
+                descriptor.element));
+        });
+        this.state = {
+            collapsed: this.groups.map(() => true)
+        };
+        this.state.collapsed[0] = false;
+    }
+    render() {
+        const rows = Object.keys(this.items)
+            .sort()
+            .map((group, index) => {
+            return (createElement(PalleteGroup, { key: index },
+                createElement(GroupHeader, { onClick: () => this.collapse(index) }, group),
+                createElement(Palette, { collapsed: this.state.collapsed[index] }, this.items[group])));
+        });
+        return createElement("div", null,
+            " ",
+            rows,
+            " ");
+    }
+    collapse(index) {
+        const collapsed = this.state.collapsed;
+        collapsed[index] = !collapsed[index];
+        this.setState({ collapsed });
+    }
+}
+
+class StyledComponentPalette extends Component {
+    render() {
+        return (createElement(ThemeProvider, { theme: this.props.theme },
+            createElement(ComponentPallette, { registry: this.props.registry, onDragStart: (event, name) => this.props.onDragStart(event, name) })));
+    }
+}
+
+export { ComponentPaletteRegistry, lightTheme, darkTheme, StyledComponentPalette as ComponentPallette };

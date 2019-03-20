@@ -1,0 +1,45 @@
+{
+  "name": "@start-app/component-palette",
+  "version": "1.0.0",
+  "description": "The Startapp.Studio FormBuilder components palette",
+  "main": "dist/component-palette.esm",
+  "module": "dist/component-palette.esm",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build:package": "npx rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StartappStudio/component-palette.git"
+  },
+  "keywords": [
+    "startapp",
+    "formbuilder"
+  ],
+  "private": false,
+  "author": "Andrey Gromozdov <andy.grom@yandex.ru>",
+  "contributors": [
+    {
+      "name": "Alex-krava",
+      "email": "",
+      "url": ""
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.8.4",
+    "styled-components": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.8",
+    "@types/styled-components": "^4.1.12",
+    "remove": "^0.1.5",
+    "rollup": "^1.4.1",
+    "rollup-plugin-typescript2": "^0.19.3",
+    "typescript": "^3.3.3333"
+  },
+  "bugs": {
+    "url": "https://github.com/StartappStudio/component-palette/issues"
+  },
+  "homepage": "https://github.com/StartappStudio/component-palette#readme"
+}
