@@ -1,6 +1,6 @@
 {
   "name": "@start-app/component-palette",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Startapp.Studio FormBuilder components palette",
   "main": "dist/component-palette.esm",
   "module": "dist/component-palette.esm",

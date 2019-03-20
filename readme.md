@@ -6,6 +6,12 @@ This package is a part of FormBuilder technology powered by [Startapp.studio](ht
 Component Palette is a component for organizing building blocks of the HTML page. This component is intended for the visual design of the HTML form.
 The component is fully customizable and has two embedded themes: light and dark
 
+### Install
+
+```bash
+npm i @start-app/component-palette
+```
+
 ### How to use.
 
 ```tsx
