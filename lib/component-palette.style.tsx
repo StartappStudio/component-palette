@@ -13,7 +13,7 @@ export const PaletteItem = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 0 0 62px;
+    flex: 1 1 62px;
     height: 62px;
     position: relative;
     border: 1px solid ${(props) => props.theme.paletteItem.borderColor};
@@ -56,7 +56,6 @@ export const PaletteItem = styled.div`
 export const Tooltip = styled.div`
     position: absolute;
     width: 100%;
-    max-width: 82px;
     top:100%;
     left: 0;
     margin-top: 5px;
