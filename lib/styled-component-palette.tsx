@@ -3,7 +3,7 @@ import { ComponentPallette, IComponentPalletteProps } from './component-palette'
 import { ThemeProvider } from './styled-components';
 import { IComponentPaletteTheme } from './themes/theme.interface';
 
-interface IStyledComponentPaletteProps extends IComponentPalletteProps {
+export interface IStyledComponentPaletteProps extends IComponentPalletteProps {
     theme: IComponentPaletteTheme;
 }
 
